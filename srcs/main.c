@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:43:16 by camerico          #+#    #+#             */
-/*   Updated: 2025/04/14 16:14:17 by camerico         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:34:10 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ int	main(int argc, char **argv)
 	init_struct(argv, &data, argc);
 	creation_mutex(&data);
 	creation_threads(&data);
-
 }
+
 
 void	init_struct(char **argv, t_data *data, int argc)
 {
