@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:09:57 by camerico          #+#    #+#             */
-/*   Updated: 2025/04/15 18:09:14 by camerico         ###   ########.fr       */
+/*   Updated: 2025/04/21 17:12:10 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <limits.h>
 # include <stdbool.h>
 # include <pthread.h>
+# include <sys/time.h>
 
 /* ************************************************************************** */
 /* DEFINES                                                                    */
@@ -47,6 +48,7 @@ typedef struct s_data
 	int				philo_death;		// 0 tout va bien, 1 un philo est mort
 	pthread_mutex_t	philo_death_mutex;
 	pthread_mutex_t	*fork_mutex;
+	pthread_mutex_t	printf_mutex;
 	pthread_t		*thread;
 	t_philo			*philo;
 }	t_data;
@@ -67,11 +69,16 @@ typedef struct s_philo
 /* PROTO                                                                      */
 /* ************************************************************************** */
 
-int	ft_atoi(const char *nptr);
+long	ft_atol(char *str);
 void	init_struct(char **argv, t_data *data, int argc);
 void	creation_mutex(t_data *data);
 void	creation_threads(t_data *data);
 void	routine(t_data *data);
+int	check_arg(int argc, char **argv);
+int	is_num(char *str);
+int is_limits(char *str);
+long	get_time_in_ms(void);
+
 
 /* ************************************************************************** */
 /* DEBUG                                                                      */
