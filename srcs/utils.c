@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:54:10 by camerico          #+#    #+#             */
-/*   Updated: 2025/04/22 18:30:01 by camerico         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:03:47 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,37 +39,71 @@
 // 	return (number * sign);
 // }
 
-
+//on verifie si la simulation doit s'arreter : soit 1 mort , soit ils ont tous mange
+//return(0) si on continue la simulation, return (1) si on doit l'arreter
 int	check_simulation_end(t_data *data)
 {
 	int	i = 0;
 
 	pthread_mutex_lock(&data->philo_death_mutex);		// on verifie si il n'y a pas de mort
 	if(data->philo_death == 1)
+	{
+		pthread_mutex_unlock(&data->philo_death_mutex);
 		return (1);
+	}
 	pthread_mutex_unlock(&data->philo_death_mutex);
 	
 	if (data->nb_of_meals_required != -1)
 	{
 		while(i < data->nb_of_philo)
 		{
-			pthread_mutex_lock(&data->philo->meals_count_mutex);
-			if (data->philo->meals_count != data->nb_of_meals_required)
-				return (1);
-			pthread_mutex_lock(&data->philo->meals_count_mutex);
+			pthread_mutex_lock(&data->philo[i].meals_count_mutex);
+			if (data->philo[i].meals_count != data->nb_of_meals_required)
+			{
+				pthread_mutex_unlock(&data->philo[i].meals_count_mutex);
+				return (0);
+			}
+			pthread_mutex_unlock(&data->philo[i].meals_count_mutex);
 			i++;
 		}
+		if (i == data->nb_of_philo)
+			return(1);
 	}
 	return(0);
 }
 
+
 //fonction pour verifier si le temps entre 2 repas n'est pas trop long. si oui -> philo mort
 void	check_if_dead(t_data *data)
 {
-	if ((data->philo->last_meal - data->start_time) > data->time_to_die)
+	int	i = 0;
+	while(i < data->nb_of_philo)
 	{
-		pthread_mutex_lock(&data->philo_death_mutex);
-		data->philo_death = 1;
-		pthread_mutex_unlock(&data->philo_death_mutex);
+		if ((get_time_in_ms() - data->philo[i].last_meal) > data->time_to_die)
+		{
+			pthread_mutex_lock(&data->philo_death_mutex);
+			data->philo_death = 1;
+			pthread_mutex_unlock(&data->philo_death_mutex);
+			pthread_mutex_lock(&data->printf_mutex);
+			printf_action(&data->philo[i], data, "died\n");		// on affiche qu'un philo est mort
+			pthread_mutex_unlock(&data->printf_mutex);
+			return;
+		}
+		i++;
 	}
+}
+
+//monitor qui va appeler les fonctions check_if_dead et check_simulation_end en boucle tant que la simulation tourne
+void	*monitor(void *arg)
+{
+	t_data	*data = (t_data *) arg;
+
+	while(1)
+	{
+		check_if_dead(data);
+		if(check_simulation_end(data) == 1)
+			break;
+		usleep(1000);
+	}
+	return (NULL);
 }

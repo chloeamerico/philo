@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:09:57 by camerico          #+#    #+#             */
-/*   Updated: 2025/04/22 17:38:21 by camerico         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:06:37 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_data
 	pthread_mutex_t	*fork_mutex;
 	pthread_mutex_t	printf_mutex;
 	pthread_t		*thread;
+	pthread_t 		monitor_thread;
 	t_philo			*philo;
 }	t_data;
 
@@ -79,6 +80,8 @@ int	check_arg(int argc, char **argv);
 int	is_num(char *str);
 int is_limits(char *str);
 long	get_time_in_ms(void);
+void	printf_action(t_philo *philo, t_data *data, char *str);
+void	*monitor(void *arg);
 
 
 /* ************************************************************************** */

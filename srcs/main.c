@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:43:16 by camerico          #+#    #+#             */
-/*   Updated: 2025/04/21 16:52:18 by camerico         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:07:54 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,12 @@ int	main(int argc, char **argv)
 	init_philo_tab(&data);
 	creation_threads(&data);
 	while(i < data.nb_of_philo)
+	{
 		pthread_join(data.thread[i], NULL); // pour attendre 
+		i++;
+	}
+	pthread_join(data.monitor_thread, NULL);
+	return(0);
 }
 
 
@@ -109,8 +114,9 @@ void	init_philo_tab(t_data *data)
 void	creation_threads(t_data *data)
 {
 	int	i = 0;
+
 	
-	data->thread = malloc(sizeof(pthread_t) * data->nb_of_philo);
+	data->thread = malloc(sizeof(pthread_t) * data->nb_of_philo + 1); // +1 pour le thread monitor
 	if (!data->thread)
 	{
 		printf("Error : malloc thread\n");
@@ -125,6 +131,8 @@ void	creation_threads(t_data *data)
 		}
 		i++;
 	}
+	pthread_create(&data->monitor_thread, NULL, monitor, &data); //fonction monitor a creer;
+	
 }
 
 // void	routine(void *arg)
