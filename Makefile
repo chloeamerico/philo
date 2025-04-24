@@ -7,7 +7,11 @@ CFLAGS = -Wall -Wextra -Werror -g3 -I.
 SRCS_DIR	=	srcs/
 OBJ_DIR		=	obj/
 
-SRCS = #fichiers
+SRCS =  main.c \
+	check_arg.c \
+	free_and_destroy.c \
+	routine.c \
+	utils.c \
 
 HEADER = philo.h
 
@@ -18,7 +22,7 @@ OBJS_PHILO 	= 	$(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
 all: $(NAME)
 
 $(NAME): $(OBJ_DIR) $(OBJS_PHILO)
-	$(CC) $(CFLAGS) $(OBJS_PHILO) -lft -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS_PHILO) -o $(NAME) -lpthread
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)

@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:09:57 by camerico          #+#    #+#             */
-/*   Updated: 2025/04/23 18:06:37 by camerico         ###   ########.fr       */
+/*   Updated: 2025/04/24 19:21:29 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ typedef struct s_data
 	pthread_mutex_t	printf_mutex;
 	pthread_t		*thread;
 	pthread_t 		monitor_thread;
-	t_philo			*philo;
+	struct s_philo			*philo;
 }	t_data;
 
 //struct pour chaque philo
@@ -71,18 +71,28 @@ typedef struct s_philo
 /* PROTO                                                                      */
 /* ************************************************************************** */
 
+int		check_arg(int argc, char **argv);
+int		is_num(char *str);
+int		is_limits(char *str);
+int		take_fork(t_philo *philo, t_data *data);
+int		philo_is_eating(t_philo *philo, t_data *data);
+int		philo_is_thinking(t_philo *philo, t_data *data);
+int		philo_is_sleeping(t_philo *philo, t_data *data);
+int		check_simulation_end(t_data *data);
+int		main(int argc, char **argv);
+long	get_time_in_ms(void);
 long	ft_atol(char *str);
 void	init_struct(char **argv, t_data *data, int argc);
 void	creation_mutex(t_data *data);
+void	destroy_mutex(int nb_mutex, t_data *data);
+void	init_philo_tab(t_data *data);
 void	creation_threads(t_data *data);
-void	routine(t_data *data);
-int	check_arg(int argc, char **argv);
-int	is_num(char *str);
-int is_limits(char *str);
-long	get_time_in_ms(void);
-void	printf_action(t_philo *philo, t_data *data, char *str);
+void	check_if_dead(t_data *data);
 void	*monitor(void *arg);
-
+void	free_all(t_data *data);
+void	printf_action(t_philo *philo, t_data *data, char *str);
+void 	*routine(void *arg);
+void	routine_for_one(t_data *data);
 
 /* ************************************************************************** */
 /* DEBUG                                                                      */

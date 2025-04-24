@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:43:16 by camerico          #+#    #+#             */
-/*   Updated: 2025/04/23 18:07:54 by camerico         ###   ########.fr       */
+/*   Updated: 2025/04/24 19:26:59 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	main(int argc, char **argv)
 		i++;
 	}
 	pthread_join(data.monitor_thread, NULL);
+	free_all(&data);
 	return(0);
 }
 
@@ -48,7 +49,7 @@ void	init_struct(char **argv, t_data *data, int argc)
 	data->time_to_eat = (int)ft_atol(argv[3]);
 	data->time_to_sleep = (int)ft_atol(argv[4]);
 	if (argc == 6)
-		data->nb_of_meals_required = ft_atoi(argv[5]);
+		data->nb_of_meals_required = ft_atol(argv[5]);
 	else
 		data->nb_of_meals_required = -1;
 	data->start_time = get_time_in_ms();
@@ -72,6 +73,7 @@ void	creation_mutex(t_data *data)
 			destroy_mutex(i, data);
 			exit(1);
 		}
+		pthread_mutex_init(&data->philo[i].meals_count_mutex, NULL);
 		i++;
 	}
 }
@@ -116,7 +118,7 @@ void	creation_threads(t_data *data)
 	int	i = 0;
 
 	
-	data->thread = malloc(sizeof(pthread_t) * data->nb_of_philo + 1); // +1 pour le thread monitor
+	data->thread = malloc(sizeof(pthread_t) * data->nb_of_philo); // +1 pour le thread monitor
 	if (!data->thread)
 	{
 		printf("Error : malloc thread\n");
@@ -132,19 +134,7 @@ void	creation_threads(t_data *data)
 		i++;
 	}
 	pthread_create(&data->monitor_thread, NULL, monitor, &data); //fonction monitor a creer;
-	
 }
-
-// void	routine(void *arg)
-// {
-// 	t_philo	*philo;
-
-// 	philo = (t_philo *)arg;
-// 	// ecrire la routine de chaque philo
-// 	// dormir, penser, manger...
-
-// 	// mettre a jour le last meal avant qu'il commence son premier repas
-// }
 
 //fonction qui va renvoyer le temps (en millisec)
 long	get_time_in_ms(void)
