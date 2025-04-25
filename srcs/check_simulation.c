@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   check_simulation.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:54:10 by camerico          #+#    #+#             */
-/*   Updated: 2025/04/24 16:50:54 by camerico         ###   ########.fr       */
+/*   Updated: 2025/04/25 18:19:55 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	check_if_dead(t_data *data)
 	int	i = 0;
 	while(i < data->nb_of_philo)
 	{
+		pthread_mutex_lock(&data->philo[i].last_meal_mutex);
 		if ((get_time_in_ms() - data->philo[i].last_meal) > data->time_to_die)
 		{
 			pthread_mutex_lock(&data->philo_death_mutex);
@@ -89,6 +90,7 @@ void	check_if_dead(t_data *data)
 			pthread_mutex_unlock(&data->printf_mutex);
 			return;
 		}
+		pthread_mutex_unlock(&data->philo[i].last_meal_mutex);
 		i++;
 	}
 }

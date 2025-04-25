@@ -11,7 +11,8 @@ SRCS =  main.c \
 	check_arg.c \
 	free_and_destroy.c \
 	routine.c \
-	utils.c \
+	check_simulation.c \
+	init.c \
 
 HEADER = philo.h
 
