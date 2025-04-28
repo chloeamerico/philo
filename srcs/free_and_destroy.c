@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:25:06 by camerico          #+#    #+#             */
-/*   Updated: 2025/04/25 18:48:41 by camerico         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:26:03 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,12 @@ void	free_all(t_data *data)
 		free(data->thread);
 	if(data->philo)
 		free(data->philo);
+	if(data->fork_mutex)
+		free(data->fork_mutex);
 }
 
 
+//du coup peut etre pas necessaire vu que j'appelle maintenant free_all a la place
 //si un mutex ne s'initialise pas, on detruit tous ceux deja initialises
 void	destroy_mutex(int nb_mutex, t_data *data)
 {

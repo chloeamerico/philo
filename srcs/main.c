@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:43:16 by camerico          #+#    #+#             */
-/*   Updated: 2025/04/25 16:51:50 by camerico         ###   ########.fr       */
+/*   Updated: 2025/04/28 16:37:48 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int argc, char **argv)
 	}
 	if(check_arg(argc, argv))
 	{
-		printf("Error arg");
+		printf("Error arg\n");
 		return (1);
 	}
 	init_struct(argv, &data, argc);

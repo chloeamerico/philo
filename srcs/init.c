@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:28:40 by camerico          #+#    #+#             */
-/*   Updated: 2025/04/25 18:49:02 by camerico         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:40:15 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	creation_mutex(t_data *data)
 	if (!data->fork_mutex)
 	{
 		printf("Error : malloc mutex\n");
+		free_all(data);
 		exit(1);		//est ce que c'est bien de faire exit ??
 	}
 	while(i < data->nb_of_philo)
@@ -42,17 +43,14 @@ void	creation_mutex(t_data *data)
 		if(pthread_mutex_init(&data->fork_mutex[i], NULL) != 0)
 		{
 			printf("Error : init mutex\n");
-			// destroy_mutex(i, data);
 			free_all(data);
 			exit(1);
 		}
-//		pthread_mutex_init(&data->philo[i].meals_count_mutex, NULL);
 		i++;
 	}
-	pthread_mutex_init(&data->philo_death_mutex, NULL);
-	pthread_mutex_init(&data->printf_mutex, NULL);
+	ft_mutex_init(&data->philo_death_mutex, data);
+	ft_mutex_init(&data->printf_mutex, data);
 }
-
 
 
 void	init_philo_tab(t_data *data)
@@ -74,12 +72,21 @@ void	init_philo_tab(t_data *data)
 		data->philo[i].meals_count = 0;
 		data->philo[i].data = data;
 		data->philo[i].last_meal = data->start_time;
-		pthread_mutex_init(&data->philo[i].meals_count_mutex, NULL);
-		pthread_mutex_init(&data->philo[i].last_meal_mutex, NULL);
+		ft_mutex_init(&data->philo[i].meals_count_mutex, data);
+		ft_mutex_init(&data->philo[i].last_meal_mutex, data);
 		i++;
 	}
 }
 
+void	ft_mutex_init(pthread_mutex_t *mutex, t_data *data)
+{
+	if (pthread_mutex_init(mutex, NULL))
+	{
+		printf("Error : init mutex\n");
+		free_all(data);
+		exit(1);
+	}
+}
 
 
 void	creation_threads(t_data *data)

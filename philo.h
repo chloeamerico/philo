@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:09:57 by camerico          #+#    #+#             */
-/*   Updated: 2025/04/25 18:18:08 by camerico         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:30:51 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void	free_all(t_data *data);
 void	printf_action(t_philo *philo, t_data *data, char *str);
 void 	*routine(void *arg);
 void	routine_for_one(t_data *data);
+void	ft_mutex_init(pthread_mutex_t *mutex, t_data *data);
 
 /* ************************************************************************** */
 /* DEBUG                                                                      */
