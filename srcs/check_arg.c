@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:17:47 by camerico          #+#    #+#             */
-/*   Updated: 2025/04/17 17:39:05 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:05:53 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,13 @@ int	check_arg(int argc, char **argv)
 	while(i <= argc - 1)
 	{
 		if (is_num(argv[i]) == 1 || is_limits(argv[i]) == 1)
-			return (1);
+			ft_exit_error("Invalid arguments.", NULL);
 		i++;
 	}
 	return (0);
 }
 
+//check si c'est bien des numbres
 int	is_num(char *str)
 {
 	int	i = 0;

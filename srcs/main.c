@@ -6,38 +6,64 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:43:16 by camerico          #+#    #+#             */
-/*   Updated: 2025/04/28 16:37:48 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:54:07 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+// int	main(int argc, char **argv)
+// {
+// 	t_data	data;
+// 	int	i = 0;
+	
+// 	if (argc != 5 && argc != 6)
+// 	{
+// 		printf("Wrong number of arguments");
+// 		return(1);
+// 	}
+// 	if(check_arg(argc, argv))
+// 	{
+// 		printf("Error arg\n");
+// 		return (1);
+// 	}
+// 	init_struct(argv, &data, argc);
+// 	creation_mutex(&data);
+// 	init_philo_tab(&data);
+// 	creation_threads(&data);
+// 	while(i < data.nb_of_philo)
+// 	{
+// 		pthread_join(data.thread[i], NULL); // pour attendre 
+// 		i++;
+// 	}
+// 	pthread_join(data.monitor_thread, NULL);
+// 	free_all(&data);
+// 	return(0);
+// }
 
 int	main(int argc, char **argv)
 {
 	t_data	data;
 	int	i = 0;
 	
-	if (argc != 5 && argc != 6)
+	if (argc == 5 || argc == 6)
 	{
-		printf("Wrong number of arguments");
-		return(1);
+		check_arg(argc, argv);
+		init_struct(argv, &data, argc);
+		creation_mutex(&data);
+		init_philo_tab(&data);
+		creation_threads(&data);
+		
+		while(i < data.nb_of_philo)
+		{
+			pthread_join(data.thread[i], NULL); // pour attendre 
+			i++;
+		}
+		pthread_join(data.monitor_thread, NULL);
+		free_all(&data);
 	}
-	if(check_arg(argc, argv))
-	{
-		printf("Error arg\n");
-		return (1);
-	}
-	init_struct(argv, &data, argc);
-	creation_mutex(&data);
-	init_philo_tab(&data);
-	creation_threads(&data);
-	while(i < data.nb_of_philo)
-	{
-		pthread_join(data.thread[i], NULL); // pour attendre 
-		i++;
-	}
-	pthread_join(data.monitor_thread, NULL);
-	free_all(&data);
+	else
+		ft_exit_error("Wrong number of arguments", NULL);
 	return(0);
 }
 

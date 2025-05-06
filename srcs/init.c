@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:28:40 by camerico          #+#    #+#             */
-/*   Updated: 2025/04/28 17:40:15 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:53:59 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	init_struct(char **argv, t_data *data, int argc)
 		data->nb_of_meals_required = ft_atol(argv[5]);
 	else
 		data->nb_of_meals_required = -1;
-	data->start_time = get_time_in_ms();
+	// data->start_time = get_time_in_ms();		// a definit plus tard
 	data->philo_death = 0;
 }
 
