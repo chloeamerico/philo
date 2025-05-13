@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:43:16 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/06 18:54:07 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:55:30 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	main(int argc, char **argv)
 		
 		while(i < data.nb_of_philo)
 		{
-			pthread_join(data.thread[i], NULL); // pour attendre 
+			pthread_join(data.philo[i].thread, NULL); // pour attendre 
 			i++;
 		}
 		pthread_join(data.monitor_thread, NULL);

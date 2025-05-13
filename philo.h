@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:09:57 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/06 18:54:15 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:59:03 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef struct s_data
 	pthread_mutex_t	*fork_mutex;
 	pthread_mutex_t	printf_mutex;
 	pthread_mutex_t	start_simulation_mutex;		// mutex pour permettre a tous les philo de commencer la simulation exactement en meme temps
-	pthread_t		*thread;
+	// pthread_t		*thread;					// a quoi il sert ??
 	pthread_t 		monitor_thread;
 	struct s_philo			*philo;
 }	t_data;
@@ -61,6 +61,7 @@ typedef struct s_philo
 	int				id; 				// de 1 a (nb de philo)
 	long			last_meal;
 	int				meals_count;
+	pthread_t		thread;	
 	pthread_mutex_t	meals_count_mutex;
 	pthread_mutex_t	last_meal_mutex;
 	pthread_mutex_t	*left_fork;
@@ -93,10 +94,11 @@ void	check_if_dead(t_data *data);
 void	*monitor(void *arg);
 void	free_all(t_data *data);
 void	printf_action(t_philo *philo, t_data *data, char *str);
-void 	*routine(void *arg);
-void	routine_for_one(t_data *data);
+void 	*routine(void *philosophe);
+void	routine_for_one(t_philo *philo);
 void	ft_mutex_init(pthread_mutex_t *mutex, t_data *data);
 void	ft_exit_error(char *message, t_data	*data);
+void	wait_and_init_routine(t_philo *philo);
 
 /* ************************************************************************** */
 /* DEBUG                                                                      */

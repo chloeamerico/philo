@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:25:06 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/06 17:58:49 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:54:48 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void	free_all(t_data *data)
 	pthread_mutex_destroy(&data->philo_death_mutex);
 	pthread_mutex_destroy(&data->printf_mutex);
 	
-	if(data->thread)
-		free(data->thread);
+	// if(data->thread)
+	// 	free(data->thread);		si pas de malloc de threads -> pas de free
 	if(data->philo)
 		free(data->philo);
 	if(data->fork_mutex)
@@ -55,7 +55,7 @@ void	ft_exit_error(char *message, t_data	*data)
 	printf("%s\n", message);
 	if(data)
 	{
-		free(data->thread);
+		// free(data->thread);
 		free(data->philo);
 	}
 	exit(EXIT_FAILURE);

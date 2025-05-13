@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:28:40 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/06 18:53:59 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:31:07 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	init_philo_tab(t_data *data)
 		data->philo[i].right_fork = &data->fork_mutex[(i + 1) % data->nb_of_philo];
 		data->philo[i].meals_count = 0;
 		data->philo[i].data = data;
-		data->philo[i].last_meal = data->start_time;
+		// data->philo[i].last_meal = data->start_time;		// a definir plus tard en meme temps que le start_time, des que les philos se lancent
 		ft_mutex_init(&data->philo[i].meals_count_mutex, data);
 		ft_mutex_init(&data->philo[i].last_meal_mutex, data);
 		i++;
@@ -88,26 +88,28 @@ void	ft_mutex_init(pthread_mutex_t *mutex, t_data *data)
 	}
 }
 
-
+//creation des threads pour les philosophes et pour les moniteurs
+//besoin de malloc les threads ??
 void	creation_threads(t_data *data)
 {
 	int	i = 0;
 
-	
-	data->thread = malloc(sizeof(pthread_t) * data->nb_of_philo); // +1 pour le thread monitor
-	if (!data->thread)
-	{
-		printf("Error : malloc thread\n");
-		exit(1);
-	}
+	// data->thread = malloc(sizeof(pthread_t) * data->nb_of_philo); // +1 pour le thread monitor
+	// if (!data->thread)
+	// {
+	// 	printf("Error : malloc thread\n");
+	// 	free(data->philo)
+	// 	exit(EXIT_FAILURE);
+	// }
+	pthread_mutex_lock(&data->start_simulation_mutex);		// pour que tous les philo commencent en meme temps
 	while(i < data->nb_of_philo)
 	{
-		if(pthread_create(&data->thread[i], NULL, routine, &data->philo[i]) != 0) // le &data->philo[i] permet a chaque philo d'acceder a sa propre structure
-		{
-			printf("Error : create threads\n");
-			exit(1);
-		}
+		if(pthread_create(&data->philo[i].thread, NULL, routine, &data->philo[i]) != 0) // le &data->philo[i] permet a chaque philo d'acceder a sa propre structure
+			ft_exit_error("Error : create philo threads", data);
 		i++;
 	}
-	pthread_create(&data->monitor_thread, NULL, monitor, &data); //fonction monitor a creer;
+	pthread_mutex_unlock(&data->start_simulation_mutex);
+	
+	if (pthread_create(&data->monitor_thread, NULL, monitor, &data) != 0)	 //fonction monitor a creer;
+		ft_exit_error("Error : create monitor thread", data);
 }

@@ -6,24 +6,26 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:06:48 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/06 15:39:38 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/13 18:20:16 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void *routine(void *arg)
+void *routine(void *philosophe)
 {
-	t_philo	*philo = (t_philo *)arg;
+	t_philo	*philo = (t_philo *)philosophe;
 	t_data *data = philo->data;
 	
-	if (data->nb_of_philo == 1)
-	{
-		routine_for_one(data);
-		return(NULL);
-	}
+	wait_and_init_routine(philo);
+	// {
+		// 	routine_for_one(philo);
+		// 	return (NULL);
+		// }
 	if (philo->id % 2 == 0)
 		usleep(500);			// on decale un peu le temps de debut pour certains
+	if (data->nb_of_philo == 1)
+		return(routine_for_one(philo), NULL);
 	while (check_simulation_end(data) == 0) // tant qu'aucun philo n'est pas mort, on continue la simulation
 	{										//ou while (1) ??
 		philo_is_thinking(philo, data);
@@ -38,16 +40,25 @@ void *routine(void *arg)
 	return (NULL);
 }
 
-void	routine_for_one(t_data *data)
+void	wait_and_init_routine(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->start_simulation_mutex);
+	philo->data->start_time = get_time_in_ms();
+	pthread_mutex_lock(&philo->last_meal_mutex);
+	philo->last_meal = get_time_in_ms();
+	pthread_mutex_unlock(&philo->last_meal_mutex);
+	pthread_mutex_unlock(&philo->data->start_simulation_mutex);	
+}
+
+void	routine_for_one(t_philo *philo)
 {
 //	pthread_mutex_lock(data->philo[0].left_fork); // on bloque le mutex de la fourchette de gauche
-	printf_action(&data->philo[0], data, "has taken a fork");
-	usleep(data->time_to_die);
+	printf_action(philo, philo->data, "has taken a fork");
+	usleep(philo->data->time_to_die);
 //	pthread_mutex_unlock(data->philo[0].left_fork);
-	printf_action(&data->philo[0], data, "died");
-	pthread_mutex_lock(&data->philo_death_mutex);
-	data->philo_death = 1;
-	pthread_mutex_unlock(&data->philo_death_mutex);
+	pthread_mutex_lock(&philo->data->philo_death_mutex);
+	philo->data->philo_death = 1;
+	pthread_mutex_unlock(&philo->data->philo_death_mutex);
 }
 
 //etape de prendre les fourchettes
@@ -147,5 +158,4 @@ int	philo_is_sleeping(t_philo *philo, t_data *data)
 // 	}
 // 	return (NULL);
 // }
-
 
