@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:54:10 by camerico          #+#    #+#             */
-/*   Updated: 2025/04/25 18:19:55 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:43:41 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	check_simulation_end(t_data *data)
 		while(i < data->nb_of_philo)
 		{
 			pthread_mutex_lock(&data->philo[i].meals_count_mutex);
-			if (data->philo[i].meals_count != data->nb_of_meals_required)
+			if (data->philo[i].full_flag == 0)
 			{
 				pthread_mutex_unlock(&data->philo[i].meals_count_mutex);
 				return (0);
@@ -105,7 +105,25 @@ void	*monitor(void *arg)
 		check_if_dead(data);
 		if(check_simulation_end(data) == 1)
 			break;
-		usleep(1000);
+		usleep(100);
 	}
 	return (NULL);
+}
+
+void	full_flag(t_philo *philo)
+{
+	int	i;
+
+	i = 0;
+	if (philo->data->nb_of_meals_required != -1)
+	{
+		while(i < philo->data->nb_of_philo)
+		{
+			pthread_mutex_lock(&philo[i].meals_count_mutex);
+			if (philo[i].last_meal == philo->data->nb_of_meals_required)
+				philo[i].full_flag = 1;
+			pthread_mutex_unlock(&philo[i].meals_count_mutex);
+			i++;
+		}
+	}
 }

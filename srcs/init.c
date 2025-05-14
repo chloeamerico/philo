@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:28:40 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/13 17:31:07 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:18:09 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	init_philo_tab(t_data *data)
 		data->philo[i].right_fork = &data->fork_mutex[(i + 1) % data->nb_of_philo];
 		data->philo[i].meals_count = 0;
 		data->philo[i].data = data;
+		data->philo[i].full_flag = 0;
 		// data->philo[i].last_meal = data->start_time;		// a definir plus tard en meme temps que le start_time, des que les philos se lancent
 		ft_mutex_init(&data->philo[i].meals_count_mutex, data);
 		ft_mutex_init(&data->philo[i].last_meal_mutex, data);

@@ -10,7 +10,7 @@ OBJ_DIR		=	obj/
 SRCS =  main.c \
 	check_arg.c \
 	free_and_destroy.c \
-	routine.c \
+	routine2.0.c \
 	check_simulation.c \
 	init.c \
 

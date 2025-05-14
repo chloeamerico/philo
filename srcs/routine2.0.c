@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   routine.c                                          :+:      :+:    :+:   */
+/*   routine2.0.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:06:48 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/13 18:20:16 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:46:40 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,22 @@ void *routine(void *philosophe)
 	t_data *data = philo->data;
 	
 	wait_and_init_routine(philo);
-	// {
-		// 	routine_for_one(philo);
-		// 	return (NULL);
-		// }
-	if (philo->id % 2 == 0)
-		usleep(500);			// on decale un peu le temps de debut pour certains
+	if (philo->id % 2 == 0)		// si les philos sont pairs, on decale un peu le temps de debut pour certains
+	{
+		if (ft_usleep((data->time_to_die - (data->time_to_eat + data->time_to_sleep)) / 2, philo))
+			return(0);			// est ce que je peux return (0) sur un void ??			
+	}
 	if (data->nb_of_philo == 1)
 		return(routine_for_one(philo), NULL);
-	while (check_simulation_end(data) == 0) // tant qu'aucun philo n'est pas mort, on continue la simulation
-	{										//ou while (1) ??
-		philo_is_thinking(philo, data);
+	while (1) // tant que c'est vrai, on continue la simulation
+	{										
 		if(check_simulation_end(data))
 			break;
 		philo_is_eating(philo, data);
 		if(check_simulation_end(data))
 			break;
 		philo_is_sleeping(philo, data);
-		usleep(100);
+		// usleep(100);
 	}
 	return (NULL);
 }
@@ -101,7 +99,8 @@ int	philo_is_eating(t_philo *philo, t_data *data)
 		philo->meals_count++;
 		pthread_mutex_unlock(&philo->meals_count_mutex);
 	}
-	usleep(data->time_to_eat * 1000);
+	if(ft_usleep(data->time_to_sleep * 1000, philo))
+		return(1);
 	
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
@@ -130,6 +129,29 @@ int	philo_is_sleeping(t_philo *philo, t_data *data)
 		return (1);
 	printf_action(philo, data, "is sleeping");
 	usleep(data->time_to_sleep * 1000);
+	return (0);
+}
+
+
+int	ft_usleep(long time_to_sleep, t_philo *philo)
+{
+	long	start_sleep;					// peut-etre passer en long long
+	long	interval;
+
+	start_sleep = get_time_in_ms();
+	interval = get_time_in_ms() - start_sleep;
+
+	while(interval < time_to_sleep)
+	{
+		pthread_mutex_lock(&philo->data->philo_death_mutex);
+		if(philo->data->philo_death == 1)
+		{
+			pthread_mutex_unlock(&philo->data->philo_death_mutex);
+			return (1);
+		}
+		pthread_mutex_unlock(&philo->data->philo_death_mutex);
+		interval = get_time_in_ms() - start_sleep;
+	}
 	return (0);
 }
 
