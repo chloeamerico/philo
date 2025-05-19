@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:28:40 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/14 17:18:09 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/16 20:59:56 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	creation_mutex(t_data *data)
 	}
 	ft_mutex_init(&data->philo_death_mutex, data);
 	ft_mutex_init(&data->printf_mutex, data);
+	ft_mutex_init(&data->start_simulation_mutex, data);
 }
 
 
@@ -111,6 +112,6 @@ void	creation_threads(t_data *data)
 	}
 	pthread_mutex_unlock(&data->start_simulation_mutex);
 	
-	if (pthread_create(&data->monitor_thread, NULL, monitor, &data) != 0)	 //fonction monitor a creer;
+	if (pthread_create(&data->monitor_thread, NULL, monitor, data) != 0)	 //fonction monitor a creer;  // peut etre &data
 		ft_exit_error("Error : create monitor thread", data);
 }

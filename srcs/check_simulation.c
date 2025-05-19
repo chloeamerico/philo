@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:54:10 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/14 17:43:41 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/16 16:45:57 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	check_simulation_end(t_data *data)
 	}
 	pthread_mutex_unlock(&data->philo_death_mutex);
 	
-	if (data->nb_of_meals_required != -1)
+	if (data->nb_of_meals_required != -1) // check le full flag
 	{
 		while(i < data->nb_of_philo)
 		{

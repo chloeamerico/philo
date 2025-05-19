@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:43:16 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/13 15:55:30 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/16 18:48:19 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	main(int argc, char **argv)
 
 
 //fonction qui va renvoyer le temps (en millisec)
-long	get_time_in_ms(void)
+long long	get_time_in_ms(void)
 {
 	struct timeval	tv;
 	long	actual_time;

@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:09:57 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/14 17:18:37 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/16 18:50:56 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ typedef struct s_data
 typedef struct s_philo
 {
 	int				id; 				// de 1 a (nb de philo)
-	long			last_meal;
+	long long		last_meal;
 	int				meals_count;
 	int				full_flag;			//0 doit comtinuer a manger, 1 a fini tous ses repas
 	pthread_t		thread;	
@@ -84,7 +84,7 @@ int		philo_is_thinking(t_philo *philo, t_data *data);
 int		philo_is_sleeping(t_philo *philo, t_data *data);
 int		check_simulation_end(t_data *data);
 int		main(int argc, char **argv);
-long	get_time_in_ms(void);
+long long	get_time_in_ms(void);
 long	ft_atol(char *str);
 void	init_struct(char **argv, t_data *data, int argc);
 void	creation_mutex(t_data *data);
@@ -101,6 +101,7 @@ void	ft_mutex_init(pthread_mutex_t *mutex, t_data *data);
 void	ft_exit_error(char *message, t_data	*data);
 void	wait_and_init_routine(t_philo *philo);
 int		ft_usleep(long time_to_sleep, t_philo *philo);
+int		each_philo_action_routine(t_philo *philo);
 
 /* ************************************************************************** */
 /* DEBUG                                                                      */
