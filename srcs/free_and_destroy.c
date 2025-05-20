@@ -6,36 +6,64 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:25:06 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/13 15:54:48 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:11:22 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+// void	free_all(t_data *data)
+// {
+// 	int i;
+
+// 	//on detruit les mutex de fourchettes
+// 	i = 0;
+// 	while(i < data->nb_of_philo)
+// 	{
+// 		pthread_mutex_destroy(&data->fork_mutex[i]);
+// 		pthread_mutex_destroy(&data->philo[i].meals_count_mutex);
+// 		pthread_mutex_destroy(&data->philo[i].last_meal_mutex);
+// 		i++;
+// 	}
+// 	pthread_mutex_destroy(&data->philo_death_mutex);
+// 	pthread_mutex_destroy(&data->printf_mutex);
+	
+// 	// if(data->thread)
+// 	// 	free(data->thread);		si pas de malloc de threads -> pas de free
+// 	if(data->philo)
+// 		free(data->philo);
+// 	if(data->fork_mutex)
+// 		free(data->fork_mutex);
+// }
+
+// ATTENTION : a modif car pas ma fonction
 void	free_all(t_data *data)
 {
-	int i;
+	int	i;
 
-	//on detruit les mutex de fourchettes
 	i = 0;
-	while(i < data->nb_of_philo)
+	if (data->fork_mutex)
 	{
-		pthread_mutex_destroy(&data->fork_mutex[i]);
-		pthread_mutex_destroy(&data->philo[i].meals_count_mutex);
-		pthread_mutex_destroy(&data->philo[i].last_meal_mutex);
-		i++;
+		while(i < data->nb_of_philo)
+			pthread_mutex_destroy(&data->fork_mutex[i++]);
+		free(data->fork_mutex);
 	}
 	pthread_mutex_destroy(&data->philo_death_mutex);
 	pthread_mutex_destroy(&data->printf_mutex);
-	
-	// if(data->thread)
-	// 	free(data->thread);		si pas de malloc de threads -> pas de free
-	if(data->philo)
-		free(data->philo);
-	if(data->fork_mutex)
-		free(data->fork_mutex);
+	pthread_mutex_destroy(&data->start_simulation_mutex);
+	i = 0;
+    if (data->philo)
+    {
+        while(i < data->nb_of_philo)
+        {
+            pthread_mutex_destroy(&data->philo[i].meals_count_mutex);
+            pthread_mutex_destroy(&data->philo[i].last_meal_mutex);
+            i++;
+        }
+        free(data->philo);
+    }
+	exit(0);
 }
-
 
 //du coup peut etre pas necessaire vu que j'appelle maintenant free_all a la place
 //si un mutex ne s'initialise pas, on detruit tous ceux deja initialises

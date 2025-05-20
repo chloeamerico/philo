@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:28:40 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/16 20:59:56 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:13:05 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,14 @@ void	creation_threads(t_data *data)
 	// 	free(data->philo)
 	// 	exit(EXIT_FAILURE);
 	// }
+	data->start_time = get_time_in_ms();
 	pthread_mutex_lock(&data->start_simulation_mutex);		// pour que tous les philo commencent en meme temps
+	
 	while(i < data->nb_of_philo)
 	{
+		pthread_mutex_lock(&data->philo[i].last_meal_mutex);
+        data->philo[i].last_meal = data->start_time;
+        pthread_mutex_unlock(&data->philo[i].last_meal_mutex);
 		if(pthread_create(&data->philo[i].thread, NULL, routine, &data->philo[i]) != 0) // le &data->philo[i] permet a chaque philo d'acceder a sa propre structure
 			ft_exit_error("Error : create philo threads", data);
 		i++;

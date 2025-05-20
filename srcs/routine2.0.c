@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:06:48 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/16 21:08:46 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:19:16 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ void *routine(void *philosophe)
 void	wait_and_init_routine(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->start_simulation_mutex);
-	philo->data->start_time = get_time_in_ms();
+	pthread_mutex_unlock(&philo->data->start_simulation_mutex);
+	
 	pthread_mutex_lock(&philo->last_meal_mutex);
 	philo->last_meal = get_time_in_ms();
 	pthread_mutex_unlock(&philo->last_meal_mutex);
-	pthread_mutex_unlock(&philo->data->start_simulation_mutex);	
 }
 
 int	each_philo_action_routine(t_philo *philo)
@@ -70,6 +70,7 @@ void	routine_for_one(t_philo *philo)
 }
 
 //etape de prendre les fourchettes
+//ancienne fonction
 int	take_fork(t_philo *philo, t_data *data)
 {
 	if(check_simulation_end(data))
@@ -91,7 +92,65 @@ int	take_fork(t_philo *philo, t_data *data)
 	printf_action(philo, data, "has taken a fork");
 	return (0);
 }
+//nouvelle fonction
+int take_fork(t_philo *philo, t_data *data)
+{
+    if(check_simulation_end(data))
+        return (1);
+        
+    if (philo->id % 2 == 0) // pour les philo pairs, commencent par la right_fork
+    {
+        pthread_mutex_lock(philo->right_fork);
+        printf_action(philo, data, "has taken a fork");
+        if(check_simulation_end(data))
+        {
+            pthread_mutex_unlock(philo->right_fork);
+            return (1);
+        }
+        pthread_mutex_lock(philo->left_fork);
+        if(check_simulation_end(data))
+        {
+            pthread_mutex_unlock(philo->right_fork);
+            pthread_mutex_unlock(philo->left_fork);
+            return (1);
+        }
+    }
+    else		// pour les philo pairs, commencent par la left_fork
+    {
+        pthread_mutex_lock(philo->left_fork);
+        printf_action(philo, data, "has taken a fork");
+        if(check_simulation_end(data))
+        {
+            pthread_mutex_unlock(philo->left_fork);
+            return (1);
+        }
+        
+        pthread_mutex_lock(philo->right_fork);
+        if(check_simulation_end(data))
+        {
+            pthread_mutex_unlock(philo->left_fork);
+            pthread_mutex_unlock(philo->right_fork);
+            return (1);
+        }
+    }
+    
+    printf_action(philo, data, "has taken a fork");
+    return (0);
+}
 
+// // a retravailler
+// // For even-numbered philosophers, take right fork first
+// if (philo->id % 2 == 0) {
+//     pthread_mutex_lock(philo->right_fork);
+//     printf_action(philo, data, "has taken a fork");
+//     pthread_mutex_lock(philo->left_fork);
+//     printf_action(philo, data, "has taken a fork");
+// } else { // For odd-numbered, take left fork first
+//     pthread_mutex_lock(philo->left_fork);
+//     printf_action(philo, data, "has taken a fork");
+//     pthread_mutex_lock(philo->right_fork);
+//     printf_action(philo, data, "has taken a fork");
+// }
 
 int	philo_is_eating(t_philo *philo, t_data *data)
 {
@@ -107,6 +166,8 @@ int	philo_is_eating(t_philo *philo, t_data *data)
 	{
 		pthread_mutex_lock(&philo->meals_count_mutex);
 		philo->meals_count++;
+		if (philo->meals_count == data->nb_of_meals_required)
+			philo->full_flag = 1;
 		pthread_mutex_unlock(&philo->meals_count_mutex);
 	}
 	if(ft_usleep(data->time_to_eat, philo))
