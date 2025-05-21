@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:54:10 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/21 15:44:19 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/21 18:06:56 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,11 @@ void	check_if_dead(t_data *data)
 			pthread_mutex_lock(&data->philo_death_mutex);
 			data->philo_death = 1;
 			pthread_mutex_unlock(&data->philo_death_mutex);
-			
-			printf_action(&data->philo[i], data, "died");		// on affiche qu'un philo est mort
+
+			pthread_mutex_lock(&data->printf_mutex);
+			printf("%lld %d died\n", (get_time_in_ms() - data->start_time), data->philo->id);
+			pthread_mutex_unlock(&data->printf_mutex);
+
 			pthread_mutex_unlock(&data->philo[i].last_meal_mutex);
 			return;
 		}
@@ -105,8 +108,8 @@ void	*monitor(void *arg)
 		check_if_dead(data);
 		if(check_simulation_end(data) == 1)
 			break;
-		// usleep(1000);
-		ft_usleep(100, data->philo);
+		usleep(100);
+		// ft_usleep(100, data->philo);
 		// pthread_mutex_lock(&data->printf_mutex);
 		// printf_action(&data->philo[0], data, "check monitor");
 		// pthread_mutex_unlock(&data->printf_mutex);

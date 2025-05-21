@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:06:48 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/21 16:12:55 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/21 18:04:41 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,10 +136,9 @@ int take_fork(t_philo *philo, t_data *data)
         {
             pthread_mutex_unlock(philo->left_fork);
             pthread_mutex_unlock(philo->right_fork);
-            return (1);
+    		return (1);
         }
     }
-    
     printf_action(philo, data, "has taken a fork");
     return (0);
 }
@@ -189,6 +188,8 @@ int	philo_is_eating(t_philo *philo, t_data *data)
 
 void	printf_action(t_philo *philo, t_data *data, char *str)
 {
+	if (check_simulation_end(data))
+		return;
 	pthread_mutex_lock(&data->printf_mutex);
 	printf("%lld %d %s\n", (get_time_in_ms() - data->start_time), philo->id, str);
 	pthread_mutex_unlock(&data->printf_mutex);
