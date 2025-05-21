@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:43:16 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/21 15:23:30 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:12:22 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ int	main(int argc, char **argv)
 			pthread_join(data.philo[i].thread, NULL); // pour attendre 
 			i++;
 		}
-		pthread_join(data.monitor_thread, NULL);
+		if (data.nb_of_philo > 1)
+			pthread_join(data.monitor_thread, NULL);
 		
 		free_all(&data);	
 	}

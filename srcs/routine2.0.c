@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:06:48 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/21 15:27:11 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:12:55 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	routine_for_one(t_philo *philo)
 	// usleep(philo->data->time_to_die * 1000);
 	ft_usleep(philo->data->time_to_die, philo);
 	
-	// printf_action(philo, philo->data, "died");
+	printf_action(philo, philo->data, "died");
 
 	pthread_mutex_lock(&philo->data->philo_death_mutex);
 	philo->data->philo_death = 1;
