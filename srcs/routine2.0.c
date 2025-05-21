@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:06:48 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/20 16:19:16 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:27:11 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,38 +60,44 @@ int	each_philo_action_routine(t_philo *philo)
 
 void	routine_for_one(t_philo *philo)
 {
-//	pthread_mutex_lock(data->philo[0].left_fork); // on bloque le mutex de la fourchette de gauche
+	pthread_mutex_lock(philo->left_fork); // on bloque le mutex de la fourchette de gauche
 	printf_action(philo, philo->data, "has taken a fork");
-	usleep(philo->data->time_to_die);
-//	pthread_mutex_unlock(data->philo[0].left_fork);
+	
+	// usleep(philo->data->time_to_die * 1000);
+	ft_usleep(philo->data->time_to_die, philo);
+	
+	// printf_action(philo, philo->data, "died");
+
 	pthread_mutex_lock(&philo->data->philo_death_mutex);
 	philo->data->philo_death = 1;
 	pthread_mutex_unlock(&philo->data->philo_death_mutex);
+
+	pthread_mutex_unlock(philo->left_fork);
 }
 
-//etape de prendre les fourchettes
-//ancienne fonction
-int	take_fork(t_philo *philo, t_data *data)
-{
-	if(check_simulation_end(data))
-		return (1);
-	pthread_mutex_lock(philo->left_fork); // on bloque le mutex de la fourchette de gauche
-	printf_action(philo, data, "has taken a fork");
-	if(check_simulation_end(data))
-	{
-		pthread_mutex_unlock(philo->left_fork);
-		return (1);
-	}
-	pthread_mutex_lock(philo->right_fork); // on bloque le mutex de la fourchette de droite
-	if(check_simulation_end(data))
-	{
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
-		return (1);
-	}
-	printf_action(philo, data, "has taken a fork");
-	return (0);
-}
+// //etape de prendre les fourchettes
+// //ancienne fonction
+// int	take_fork(t_philo *philo, t_data *data)
+// {
+// 	if(check_simulation_end(data))
+// 		return (1);
+// 	pthread_mutex_lock(philo->left_fork); // on bloque le mutex de la fourchette de gauche
+// 	printf_action(philo, data, "has taken a fork");
+// 	if(check_simulation_end(data))
+// 	{
+// 		pthread_mutex_unlock(philo->left_fork);
+// 		return (1);
+// 	}
+// 	pthread_mutex_lock(philo->right_fork); // on bloque le mutex de la fourchette de droite
+// 	if(check_simulation_end(data))
+// 	{
+// 		pthread_mutex_unlock(philo->left_fork);
+// 		pthread_mutex_unlock(philo->right_fork);
+// 		return (1);
+// 	}
+// 	printf_action(philo, data, "has taken a fork");
+// 	return (0);
+// }
 //nouvelle fonction
 int take_fork(t_philo *philo, t_data *data)
 {
