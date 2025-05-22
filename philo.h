@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:09:57 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/16 18:50:56 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/22 17:16:26 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void	ft_exit_error(char *message, t_data	*data);
 void	wait_and_init_routine(t_philo *philo);
 int		ft_usleep(long time_to_sleep, t_philo *philo);
 int		each_philo_action_routine(t_philo *philo);
+void	full_flag(t_philo *philo);
 
 /* ************************************************************************** */
 /* DEBUG                                                                      */

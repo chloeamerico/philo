@@ -1,7 +1,7 @@
 NAME = philo
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 -I. -pthread
+CFLAGS = -Wall -Wextra -Werror -g -I. -pthread 
 
 # dossiers
 SRCS_DIR	=	srcs/

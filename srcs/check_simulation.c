@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:54:10 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/21 18:06:56 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:53:10 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,9 @@ void	check_if_dead(t_data *data)
 			data->philo_death = 1;
 			pthread_mutex_unlock(&data->philo_death_mutex);
 
+			// printf_action(&data->philo[i], data, "died");
 			pthread_mutex_lock(&data->printf_mutex);
-			printf("%lld %d died\n", (get_time_in_ms() - data->start_time), data->philo->id);
+			printf("%lld %d died\n", (get_time_in_ms() - data->start_time), data->philo[i].id);
 			pthread_mutex_unlock(&data->printf_mutex);
 
 			pthread_mutex_unlock(&data->philo[i].last_meal_mutex);
