@@ -6,7 +6,7 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:17:47 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/06 18:05:53 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/22 20:32:01 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 long	ft_atol(char *str)
 {
-	int	i;
-	int	sign;
+	int		i;
+	int		sign;
 	long	number;
 
 	i = 0;
@@ -38,14 +38,14 @@ long	ft_atol(char *str)
 	return (number * sign);
 }
 
-
-// on verifie que les arguments donnes en argv sont bien que des entiers positifs
+// on verifie que les arguments donnes en argv sont bien que 
+//des entiers positifs
 int	check_arg(int argc, char **argv)
 {
 	int	i;
 
 	i = 1;
-	while(i <= argc - 1)
+	while (i <= argc - 1)
 	{
 		if (is_num(argv[i]) == 1 || is_limits(argv[i]) == 1)
 			ft_exit_error("Invalid arguments.", NULL);
@@ -57,22 +57,25 @@ int	check_arg(int argc, char **argv)
 //check si c'est bien des numbres
 int	is_num(char *str)
 {
-	int	i = 0;
+	int	i;
 
-	while(str[i])
+	i = 0;
+	while (str[i])
 	{
 		if (str[i] < '0' || str[i] > '9')
-			return(1);
+			return (1);
 		i++;
 	}
-	return(0);
+	return (0);
 }
 
 //check si le nb est entre 0 et INT_MAX
-int is_limits(char *str)
+int	is_limits(char *str)
 {
-	long	nb = ft_atol(str);
-	if (nb <= 0 || nb > INT_MAX)		// peut etre <= 0 ?? est ce que == 0 c'est ok ??
-		return(1);
+	long	nb;
+
+	nb = ft_atol(str);
+	if (nb <= 0 || nb > INT_MAX)
+		return (1);
 	return (0);
 }

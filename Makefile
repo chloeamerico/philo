@@ -13,6 +13,8 @@ SRCS =  main.c \
 	routine2.0.c \
 	check_simulation.c \
 	init.c \
+	philo_actions.c \
+	utils.c \
 
 HEADER = philo.h
 

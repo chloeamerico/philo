@@ -6,46 +6,18 @@
 /*   By: camerico <camerico@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:43:16 by camerico          #+#    #+#             */
-/*   Updated: 2025/05/21 16:12:22 by camerico         ###   ########.fr       */
+/*   Updated: 2025/05/22 21:00:26 by camerico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// int	main(int argc, char **argv)
-// {
-// 	t_data	data;
-// 	int	i = 0;
-	
-// 	if (argc != 5 && argc != 6)
-// 	{
-// 		printf("Wrong number of arguments");
-// 		return(1);
-// 	}
-// 	if(check_arg(argc, argv))
-// 	{
-// 		printf("Error arg\n");
-// 		return (1);
-// 	}
-// 	init_struct(argv, &data, argc);
-// 	creation_mutex(&data);
-// 	init_philo_tab(&data);
-// 	creation_threads(&data);
-// 	while(i < data.nb_of_philo)
-// 	{
-// 		pthread_join(data.thread[i], NULL); // pour attendre 
-// 		i++;
-// 	}
-// 	pthread_join(data.monitor_thread, NULL);
-// 	free_all(&data);
-// 	return(0);
-// }
-
 int	main(int argc, char **argv)
 {
 	t_data	data;
-	int	i = 0;
-	
+	int		i;
+
+	i = 0;
 	if (argc == 5 || argc == 6)
 	{
 		check_arg(argc, argv);
@@ -53,33 +25,16 @@ int	main(int argc, char **argv)
 		creation_mutex(&data);
 		init_philo_tab(&data);
 		creation_threads(&data);
-		
-		// usleep(1000);
-		
-		while(i < data.nb_of_philo)
+		while (i < data.nb_of_philo)
 		{
-			pthread_join(data.philo[i].thread, NULL); // pour attendre 
+			pthread_join(data.philo[i].thread, NULL);
 			i++;
 		}
 		if (data.nb_of_philo > 1)
 			pthread_join(data.monitor_thread, NULL);
-		
-		free_all(&data);	
+		free_all(&data);
 	}
 	else
 		ft_exit_error("Wrong number of arguments", NULL);
-	return(0);
-}
-
-
-//fonction qui va renvoyer le temps (en millisec)
-long long	get_time_in_ms(void)
-{
-	struct timeval	tv;
-	long	actual_time;
-
-	if (gettimeofday(&tv, NULL) != 0) //on recupere le temps actuel
-		return(-1);
-	actual_time = (tv.tv_sec * 1000) + (tv.tv_usec / 1000); //convertit en millisec
-	return(actual_time);
+	return (0);
 }
